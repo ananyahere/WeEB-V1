@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const { isEmail } = require("validator")
 const bcrypt = require('bcrypt')
+const { ObjectId } = mongoose.Schema.Types 
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -15,6 +16,33 @@ const userSchema = new mongoose.Schema({
     required: [true, "Please enter a password"],
     minlength: [6, "Minimum password length is 6 characters"],
   },
+  followers:[{
+    type: ObjectId,
+    ref: "user"
+  }],
+  following: [{
+    type: ObjectId,
+    ref: "user"
+  }],
+  avatar: {
+    type: String
+  },
+  bio: {
+    type: String,
+    default: "no bio"
+  },
+  nickname: {
+    type: String,
+    default: "no nickname"
+  },
+  personalityType: {
+    type: String,
+    default: "no personality"
+  },
+  role: {
+    type: String,
+    default: "no role"
+  }
 });
 
 userSchema.pre('save', async function(next){
@@ -49,7 +77,3 @@ userSchema.statics.findUser = async function(email) {
 const User = mongoose.model("user", userSchema);
 
 module.exports = User;
-
-
-//$2b$10$Akpw.0JPps8/tqzySzNRkOM0.SQq9MOWyTUrallxoY4e.idGoVOqW
-//$2b$10$MbuKxDPhD6JQCS0ihwgTi.CQfg7UAB.awVBiBFbtQ3No/zeQsvoEa

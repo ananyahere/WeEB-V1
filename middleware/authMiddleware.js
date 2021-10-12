@@ -27,15 +27,18 @@ const checkUser = (req, res, next) => {
     jwt.verify(token, 'ananya sh secret', async (err, decodedToken) => {
       if (err) {
         res.locals.user = null;
+        req.user = null
         next();
       } else {
         let user = await User.findById(decodedToken.id);
         res.locals.user = user;
+        req.user = user;
         next();
       }
     });
   } else {
     res.locals.user = null;
+    req.user = null;
     next();
   }
 };
