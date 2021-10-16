@@ -1,7 +1,5 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
-const bcrypt = require('bcrypt')
 
 // handle errors
 const handleErrors = (err) => {
