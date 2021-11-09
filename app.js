@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const authRoutes = require("./routes/authRoutes")
 const postRoutes = require('./routes/postRoutes')
 const commentRoutes = require('./routes/commentRoutes')
+const userRoutes = require('./routes/userRoutes')
 const cookieParser = require('cookie-parser')
 const { requireAuth, checkUser } = require('./middleware/authMiddleware')
 
@@ -10,13 +11,13 @@ const { requireAuth, checkUser } = require('./middleware/authMiddleware')
 const app = express();
 
 // middleware
-app.use(express.static("public"))
+// app.use(express.static("public"))
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cookieParser())
 
-// view engine
-app.set("view engine", "ejs");
+// // view engine
+// app.set("view engine", "ejs");
 
 // database connection
 const dbURI =
@@ -40,6 +41,7 @@ mongoose
 app.get('*', checkUser)
 app.get("/", (req, res) => res.render("home"));
 app.get("/smoothies",requireAuth ,(req, res) => res.render("smoothies"));
+app.use(userRoutes)
 app.use(authRoutes);
 app.use(postRoutes);
 app.use(commentRoutes)

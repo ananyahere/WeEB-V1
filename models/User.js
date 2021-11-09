@@ -25,7 +25,8 @@ const userSchema = new mongoose.Schema({
     ref: "user"
   }],
   avatar: {
-    type: String
+    type: String,
+    default: "no pic"
   },
   bio: {
     type: String,

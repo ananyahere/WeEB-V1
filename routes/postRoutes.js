@@ -32,6 +32,7 @@ router.get('/myposts', requireAuth, checkUser, async (req, res) => {
   }
 })
 
+// get all the post on the app
 router.get('/allposts', async (req, res) => {
   try {
     const posts = await Post.find().populate("postedBy", "_id email")
@@ -42,6 +43,7 @@ router.get('/allposts', async (req, res) => {
   }
 })
 
+// get post of all the people that user follow
 router.get('/subposts', requireAuth, checkUser, async (req, res) => {
   try {
     const posts = await Post.find({postedBy: {$in: req.user.following}}).populate("postedBy", "_id email")
@@ -53,9 +55,9 @@ router.get('/subposts', requireAuth, checkUser, async (req, res) => {
 })
 
 router.post('/createpost', requireAuth, checkUser, async (req, res) => {
-  const { title, body } = req.body
+  const { title, body, photoLink } = req.body
   try {
-    const post = await Post.create({ title, body, postedBy: req.user })
+    const post = await Post.create({ title, body, postedBy: req.user, photoLink })
     res.status(201).json({ post: post._id })
   } catch (err) {
     const errors = handleErrors(err)

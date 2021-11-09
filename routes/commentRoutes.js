@@ -25,7 +25,7 @@ router.get('/allcomments/:post_id', requireAuth, async(req, res) => {
 })
 
 // post a comment 
-router.post('/comment/:post_id', requireAuth, checkUser, async(req, res) => {
+router.post('/addComment/:post_id', requireAuth, checkUser, async(req, res) => {
   const postId = req.params['post_id']
   const user = req.user
   const { body } = req.body

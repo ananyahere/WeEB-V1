@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const mailHandler = require("../utils/email")
 
 // handle errors
 const handleErrors = (err) => {
@@ -101,6 +102,8 @@ module.exports.forgetPassword_post = async (req, res) => {
     const user = await User.findUser(email);
     //create jwt & email one-time link
     const token = createTokenForResetPwd(user._id);
+    //send one-time-valid link
+    mailHandler(user.email,user._id,token)
     console.log(
       `email -> http://localhost:8000/reset-password/${user.email}/${user.id}/${token}`
     );

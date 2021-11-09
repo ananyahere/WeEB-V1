@@ -10,7 +10,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter a post-body"]
   },
-  photo:{
+  photoLink:{
     type: String
   },
   postedBy: {

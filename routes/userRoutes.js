@@ -10,12 +10,12 @@ router.get("/profile/:user_id", requireAuth, async (req, res) => {
     // get user (without password)
     const user = await User.findOne({ _id: userId }).select("-password");
     // get all the post by that user
-    const posts = await Post.find({ _id: postedBy }).populate(
+    const posts = await Post.find({ _id: user.postedBy }).populate(
       "postedBy",
       "_id email"
     );
     res.status(200).json(user, posts);
-    console.log("other users's feed", user, post);
+    console.log("other users's feed", user, posts);
   } catch (e) {
     res.status(500).send(e.message);
     console.log(e);
@@ -98,6 +98,7 @@ router.put("/updateAvatar", requireAuth, checkUser, async (req, res) => {
       },
       { new: true }
     );
+    console.log(avatarURL)
     res.status(200).json({ message: "pic uploaded" });
   } catch (e) {
     console.log(e);
@@ -105,7 +106,7 @@ router.put("/updateAvatar", requireAuth, checkUser, async (req, res) => {
   }
 });
 
-router.patch("/updateBio", requireAuth, checkUser, async(req, res) => {
+router.put("/updateBio", requireAuth, checkUser, async(req, res) => {
   const bio = req.body.bio
   const personality = req.body.personality
   const role = req.body.role
@@ -118,6 +119,7 @@ router.patch("/updateBio", requireAuth, checkUser, async(req, res) => {
       },
       { new: true }
     );
+    res.status(200).json({ message: "bio uploaded" });
   }catch(e){
     console.log(e)
     res.status(500).send(e)
