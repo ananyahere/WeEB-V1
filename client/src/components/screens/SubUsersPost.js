@@ -1,38 +1,39 @@
 import React, {useState, useEffect} from 'react'
-import './Home.css'
 import Post from '../utils/Post'
 
-function Home() {
+function SubUsersPost() {
   const [posts, setPosts] = useState([])
 
-  const getPosts = async() => {
+  const getSubPost = async () => {
     try{
-      const response = await fetch('/allposts', {
-        headers: { 
+      const response = await fetch('/subposts', {
+        headers: {
           'method': 'GET',
           'Content-Type': 'application/json',
           'Accept': 'application/json'
-      }        
+        }
       })
       const resJSON = await response.json()
+      console.log(resJSON)
       setPosts(resJSON)
     }catch(e){
       console.log(e)
     }
   }
 
-  useEffect( () => {getPosts()}
-  , [])
+  useEffect(() => {
+    getSubPost()
+  }, [])
 
   const postsToRender = posts.map(post => <Post key={post._id} post={post}/>)
 
   return (
     <div className="home">
       <ul className="posts">
-      {posts.length == 0?"No Post Found :(":postsToRender}
+      {posts.length == 0? "No Post Found :(": postsToRender}
       </ul>
     </div>
   )
 }
 
-export default Home
+export default SubUsersPost

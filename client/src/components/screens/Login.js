@@ -1,8 +1,14 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import './Form.css'
+import {UserContext} from '../../App'
+import { LoginStatusContext } from '../Hooks/LoginStatusContext'
+import {useHistory} from 'react-router-dom'
 import {Link} from 'react-router-dom'
 
 function Login() {
+  const history = useHistory()
+  const {isLoggedIn, setIsLoggedIn} = useContext(LoginStatusContext)
+  const {state, dispatch} = useContext(UserContext) 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -11,19 +17,21 @@ function Login() {
    const emailError = document.querySelector('.email.error');
    const passwordError = document.querySelector('.password.error');
    try {
-    const res = await fetch('/login', { 
+    const response = await fetch('/login', { 
       method: 'POST', 
       body: JSON.stringify({ email, password }),
       headers: {'Content-Type': 'application/json'}
     });
-    const data = await res.json();
-    // console.log(data);
+    const data = await response.json();  
     if (data.errors) {
       emailError.textContent = data.errors.email;
       passwordError.textContent = data.errors.password;
     }
     if (data.user) {
-      window.location.assign('/');
+      localStorage.setItem('user', JSON.stringify(data.user))
+      dispatch({type:"USER", payload: data.user})      
+      setIsLoggedIn(true)
+      history.push('/')
     }
   }
   catch (err) {
@@ -49,7 +57,7 @@ function Login() {
   <label htmlFor="password">Password</label>
   <input type="password" name="password" required value={password} onChange={passwordHandler}/>
   <div className="password error"></div>
-  <div><a href="/forget-password">Forgot Password</a></div>
+  <div><a href="/forget-password"><Link to="/forgetPassword">Forgot Password</Link></a></div>
   <button>login</button>
   <p className="form-p">
     <Link to="/signup">Don't have an account?</Link>

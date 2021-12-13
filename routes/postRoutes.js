@@ -20,10 +20,7 @@ const handleErrors = (err) => {
 
 router.get('/myposts', requireAuth, checkUser, async (req, res) => {
   try {
-    const myPosts = await Post.find({ postedBy: req.user._id }).populate("postedBy", "_id email")
-    if (myPosts == '') {
-      return res.status(404).json({ error: "no post found" })
-    }
+    const myPosts = await Post.find({ postedBy: req.user._id }).populate("postedBy", "_id email nickname")
     res.status(200).json({ userPosts: myPosts })
 
   } catch (err) {
@@ -33,10 +30,10 @@ router.get('/myposts', requireAuth, checkUser, async (req, res) => {
 })
 
 // get all the post on the app
-router.get('/allposts', async (req, res) => {
+router.get('/allposts', requireAuth, checkUser, async (req, res) => {
   try {
-    const posts = await Post.find().populate("postedBy", "_id email")
-    res.status(200).json(posts)
+    const posts = await Post.find().populate("postedBy", "_id email nickname").sort('-createdAt')
+    res.status(200).json( posts )
   } catch (err) {
     console.log(err)
     res.status(500)
@@ -46,7 +43,8 @@ router.get('/allposts', async (req, res) => {
 // get post of all the people that user follow
 router.get('/subposts', requireAuth, checkUser, async (req, res) => {
   try {
-    const posts = await Post.find({postedBy: {$in: req.user.following}}).populate("postedBy", "_id email")
+    const posts = await Post.find({postedBy: {$in: req.user.following}}).populate("postedBy", "_id email nickname").sort('-createdAt')
+    // console.log("getsubosts")
     res.status(200).json(posts)
   } catch (err) {
     console.log(err)
@@ -77,7 +75,6 @@ router.patch('/post/react/:post_id', requireAuth, checkUser, async (req, res) =>
         }
       }
     }, { new: true })
-    console.log(post)
     res.status(200).json(post)
   } catch (err) {
     console.log(err)
@@ -104,6 +101,17 @@ router.patch('/post/unreact/:post_id', requireAuth, checkUser, async (req, res) 
     res.status(400).send(err.message)
   }
 
+})
+
+router.get('/post/allReacts/:post_id', requireAuth, checkUser, async (req, res) => {
+  try{
+    const postId = req.params['post_id']
+    const post = await Post.find({ _id: postId })
+    res.status(200).json(post.reacts.reaction)
+  }catch(e){
+    console.log(e)
+    res.status(400).send(e.message)
+  }
 })
 
 router.delete('/deletepost/:post_id', requireAuth, checkUser, async (req, res) => {

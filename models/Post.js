@@ -27,6 +27,6 @@ const postSchema = new mongoose.Schema({
       // => good, ok, bad
     }
   }]
-})
+}, {timestamps: true})
 
 module.exports = mongoose.model('post', postSchema)

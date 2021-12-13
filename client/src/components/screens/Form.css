@@ -12,7 +12,7 @@ form{
   background: white;
 }
 input{
-  padding: 10px 12px;
+  padding: 10px 12x;
   border-radius: 4px;
   border: 1px solid #ddd;
   font-size: 1em;
@@ -33,6 +33,7 @@ button{
   display: block;
   padding: 10px 16px;
   letter-spacing: 2px;
+  cursor: pointer;
 }
 .error{
   color: #ff0099;
@@ -50,4 +51,32 @@ button{
 
 .form-p:hover{
   text-decoration: underline;
+}
+
+.comment-input{
+  padding: 10px 10x;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1em;
+  width: 100%;
+}
+
+.comment-form{
+  width: 300px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.comment-add-btn{
+  margin-top: 10px;
+  border-radius: 36px;
+  background: #FEE996;
+  border:0;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.6em;
+  display: block;
+  padding: 8px 14px;
+  letter-spacing: 2px;
+  cursor: pointer;
 }

@@ -23,6 +23,6 @@ const commentSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "post"
   }
-})
+}, {timestamps: true})
 
 module.exports = mongoose.model('comment', commentSchema)

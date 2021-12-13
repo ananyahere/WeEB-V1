@@ -18,7 +18,6 @@ function CreatePost() {
         body: formData
       })
       const JSONres = await res.json()
-      console.log(JSONres)
       setImageURL(JSONres.url)
     }catch(e){
       console.log(e)
@@ -46,7 +45,6 @@ function CreatePost() {
         }
       })
       const JSONdata = await res.json()
-      console.log(JSONdata)
     }catch(e){
       console.log(e)
     }
@@ -60,13 +58,13 @@ function CreatePost() {
     <div>
       <form onSubmit={submitHandler}>
       <h2>Post</h2>
-        <label for="post-title">Title</label>
+        <label htmlFor="post-title">Title</label>
         <input type="text" value={postTitle} onChange={postTitleHandler}/>
       
-        <label for="post-body" >Body</label>
+        <label htmlFor="post-body" >Body</label>
         <input type="text" value={postBody} onChange={postBodyHandler}/>
        
-        <label for="post-file">Image</label>
+        <label htmlFor="post-file">Image</label>
         <input type="file" name="post-file" onChange={fileHandler}/>
   
         <button>Create Post</button>

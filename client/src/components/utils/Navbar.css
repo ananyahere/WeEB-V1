@@ -10,6 +10,7 @@ nav ul{
 }
 nav li{
   margin-left: 20px;
+  cursor: pointer;
 }
 .navStyle{
   text-transform: uppercase;
@@ -18,4 +19,22 @@ nav li{
   display: block;
   padding: 10px 16px;
   letter-spacing: 2px;
+}
+.footer{
+  position: absolute;
+  bottom: 0;
+  margin-right: 0;
+  margin-left: 90%;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.output{
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.output li{
+  margin-top: 15px;
+  margin-bottom: 15px;
 }

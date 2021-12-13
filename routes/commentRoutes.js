@@ -6,18 +6,19 @@ const User = require('../models/User')
 
 
 // get all comments of a post
-router.get('/allcomments/:post_id', requireAuth, async(req, res) => {
-   let responseArr = []
+router.get('/allComments/:post_id', requireAuth, async(req, res) => {
     try{
+      let responseArr = []
       const postId = req.params['post_id'].trim()
-      const comments = await Comment.find({commentedOn: postId}).populate("commentedOn", "_id body title commentedBy")
-      comments.forEach(async (comment) => {
-        // get the user info
-        const user = await User.find({_id: comment.commentedBy}).populate("_id", "_id email")
+      const comments = await Comment.find({commentedOn: postId}).populate("commentedOn", "_id body title commentedBy").sort('-createdAt')
+      // modified version of ForEach loop for async function
+      for(const comment of comments){
+        const user = await User.find({_id: comment.commentedBy}).populate("_id", "_id email nickname")
         const response = {comment,user: user[0]}
-        responseArr.push(response)
-      })
-      res.status(200).json({comments: responseArr})
+        // console.log(response)
+        responseArr.push(response)          
+      }
+      res.status(200).json(responseArr)
     }catch(err){
       console.log(err.message)
       res.status(500)

@@ -8,13 +8,43 @@ const cookieParser = require('cookie-parser')
 const { requireAuth, checkUser } = require('./middleware/authMiddleware')
 
 
-const app = express();
+const app = express()
+const http = require('http')
+const cors = require('cors')
+const { Server } = require('socket.io')
+const server = http.createServer(app)
 
 // middleware
 // app.use(express.static("public"))
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cookieParser())
+app.use(cors())
+
+// socket.io configuration
+const io = new Server(server,{
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ['GET', 'POST'],
+  }
+})
+
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`)
+
+  socket.on("join_room",(roomId) => {
+    socket.join(roomId)
+    console.log(`user with id: ${socket.id} joined room id: ${roomId}`)
+  })
+  
+  socket.on("send_message", (Msgdata) => {
+    socket.to(Msgdata.room).emit("recieve_message", Msgdata)
+  })  
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected: ", socket.id)
+  })
+})
 
 // // view engine
 // app.set("view engine", "ejs");
@@ -30,7 +60,7 @@ mongoose
   })
   .then((result) => {
     console.log('mongobd connected')
-    app.listen(8000, () => {
+    server.listen(8000, () => {
       console.log("Listening at port 8000");
     })
   }
@@ -39,8 +69,6 @@ mongoose
 
 // routes
 app.get('*', checkUser)
-app.get("/", (req, res) => res.render("home"));
-app.get("/smoothies",requireAuth ,(req, res) => res.render("smoothies"));
 app.use(userRoutes)
 app.use(authRoutes);
 app.use(postRoutes);
