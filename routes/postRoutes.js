@@ -44,7 +44,6 @@ router.get('/allposts', requireAuth, checkUser, async (req, res) => {
 router.get('/subposts', requireAuth, checkUser, async (req, res) => {
   try {
     const posts = await Post.find({postedBy: {$in: req.user.following}}).populate("postedBy", "_id email nickname").sort('-createdAt')
-    // console.log("getsubosts")
     res.status(200).json(posts)
   } catch (err) {
     console.log(err)

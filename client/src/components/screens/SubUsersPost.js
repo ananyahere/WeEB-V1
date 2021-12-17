@@ -30,7 +30,7 @@ function SubUsersPost() {
   return (
     <div className="home">
       <ul className="posts">
-      {posts.length == 0? "No Post Found :(": postsToRender}
+      {posts.length === 0? "No Post Found :(": postsToRender}
       </ul>
     </div>
   )

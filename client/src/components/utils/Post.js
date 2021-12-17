@@ -3,7 +3,6 @@ import Modal from "react-modal";
 import { useState, useContext } from "react";
 import "./Post.css";
 import Comment from "../utils/Comment";
-import { FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../App";
 
@@ -13,11 +12,8 @@ function Post({ post }) {
   const { state, dispatch } = useContext(UserContext);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [comments, setComments] = useState([]);
-  const [IsreactGood, setIsReactGood] = useState(false);
-  const [IsreactOK, setIsReactOK] = useState(false);
-  const [IsreactBad, setIsReactBad] = useState(false);
   const [newComment, setNewComment] = useState("");
-  const [reacts, setReacts] = useState({});
+
 
   const getComments = async () => {
     try {
@@ -59,16 +55,6 @@ function Post({ post }) {
       console.log(err);
     }
     setNewComment("");
-  };
-
-  const reactHandler = (react) => {
-    if (react == "good") {
-      setIsReactGood(!IsreactGood);
-    } else if (react == "ok") {
-      setIsReactOK(!IsreactOK);
-    } else if (react == "bad") {
-      setIsReactBad(!IsreactBad);
-    }
   };
 
   return (
@@ -131,35 +117,6 @@ function Post({ post }) {
               <Comment commentInfo={comment} />
             ))}
           </div>
-          {/* <div className="reacts">
-            <div
-              className={IsreactGood ? "good" : null}
-              onClick={() => {
-                reactHandler("good");
-              }}
-            >
-              <FaHeart />
-              <p>{1}</p>
-            </div>
-            <div
-              className={IsreactOK ? "ok" : null}
-              onClick={() => {
-                reactHandler("ok");
-              }}
-            >
-              <FaHeart />
-              <p>{1}</p>
-            </div>
-            <div
-              className={IsreactBad ? "bad" : null}
-              onClick={() => {
-                reactHandler("bad");
-              }}
-            >
-              <FaHeart />
-              <p>{1}</p>
-            </div>
-          </div> */}
           <form onSubmit={submitHandler} className="comment-form">
             <input
               type="text"

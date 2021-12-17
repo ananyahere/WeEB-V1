@@ -46,7 +46,6 @@ router.patch("/follow", requireAuth, checkUser, async (req, res) => {
         new: true,
       }
     ).select("-password");
-    console.log("follow request sent");
     res.status(200).json({ userToFollow, userLoggedIn });
   } catch (e) {
     res.status(500).send(e.message);
@@ -78,7 +77,6 @@ router.patch("/unfollow", requireAuth, checkUser, async (req, res) => {
         new: true,
       }
     ).select("-password");
-    console.log("unfollow request sent");
     res.status(200).json({ userToUnfollow, userLoggedIn });
   } catch (e) {
     res.status(500).send(e.message);
@@ -88,7 +86,7 @@ router.patch("/unfollow", requireAuth, checkUser, async (req, res) => {
 
 router.put("/updateAvatar", requireAuth, checkUser, async (req, res) => {
   const avatarURL = req.body.avatarURL;
-  const userLoggedInId = req.user._id;  
+  const userLoggedInId = req.user._id;
   try {
     const user = await User.findByIdAndUpdate(
       { _id: userLoggedInId },
@@ -96,9 +94,8 @@ router.put("/updateAvatar", requireAuth, checkUser, async (req, res) => {
         $set: { avatar: avatarURL },
       },
       { new: true }
-    )
-    console.log("request to update avatar")
-    res.status(200).json({updatedUser: user});
+    );
+    res.status(200).json({ updatedUser: user });
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
@@ -118,7 +115,7 @@ router.put("/updateBio", requireAuth, checkUser, async (req, res) => {
       },
       { new: true }
     );
-    res.status(200).json({updatedUser: user});
+    res.status(200).json({ updatedUser: user });
   } catch (e) {
     console.log(e);
     res.status(500).send(e);
@@ -126,13 +123,13 @@ router.put("/updateBio", requireAuth, checkUser, async (req, res) => {
 });
 
 router.post("/search-user", requireAuth, checkUser, async (req, res) => {
-  let userPattern = new RegExp("^"+req.body.query)
-  try{
-    const user = await User.find({email:{$regex:userPattern}})
-    res.status(200).json({user})
-  }catch(e){
-    console.log(e)
+  let userPattern = new RegExp("^" + req.body.query);
+  try {
+    const user = await User.find({ email: { $regex: userPattern } });
+    res.status(200).json({ user });
+  } catch (e) {
+    console.log(e);
   }
-})
+});
 
 module.exports = router;

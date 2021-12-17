@@ -5,7 +5,8 @@ const postRoutes = require('./routes/postRoutes')
 const commentRoutes = require('./routes/commentRoutes')
 const userRoutes = require('./routes/userRoutes')
 const cookieParser = require('cookie-parser')
-const { requireAuth, checkUser } = require('./middleware/authMiddleware')
+const { checkUser } = require('./middleware/authMiddleware')
+const path = require('path')
 
 
 const app = express()
@@ -46,8 +47,24 @@ io.on("connection", (socket) => {
   })
 })
 
-// // view engine
-// app.set("view engine", "ejs");
+// routes
+app.get('*', checkUser)
+app.use(userRoutes)
+app.use(authRoutes);
+app.use(postRoutes);
+app.use(commentRoutes)
+
+const port = process.env.PORT || 8000
+
+// Server Static in production
+if(process.env.NODE_ENV === 'production'){
+  // set static folder
+  app.use(express.static('client/build'))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  })
+}
 
 // database connection
 const dbURI =
@@ -60,16 +77,11 @@ mongoose
   })
   .then((result) => {
     console.log('mongoose connected')
-    server.listen(8000, () => {
-      console.log("Listening at port 8000");
+    server.listen(port, () => {
+      console.log(`Listening at port ${port}`);
     })
   }
   )
   .catch((err) => console.log(err));
 
-// routes
-app.get('*', checkUser)
-app.use(userRoutes)
-app.use(authRoutes);
-app.use(postRoutes);
-app.use(commentRoutes)
+

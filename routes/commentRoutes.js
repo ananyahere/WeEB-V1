@@ -15,7 +15,6 @@ router.get('/allComments/:post_id', requireAuth, async(req, res) => {
       for(const comment of comments){
         const user = await User.find({_id: comment.commentedBy}).populate("_id", "_id email nickname")
         const response = {comment,user: user[0]}
-        // console.log(response)
         responseArr.push(response)          
       }
       res.status(200).json(responseArr)
@@ -50,7 +49,6 @@ router.patch('/comment/react/:comment_id', requireAuth, async (req, res) => {
         reaction
       }}
     }, {new: true})
-    console.log(comment)
     res.status(200).json(comment)
   }catch(err){
     console.log(err)
@@ -69,7 +67,6 @@ router.patch('/comment/unreact/:comment_id', requireAuth, async (req, res) => {
         reaction
       }}
     }, {new: true})
-    console.log(comment)
     res.status(200).json(comment)
   }catch(err){
     console.log(err)

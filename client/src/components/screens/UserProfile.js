@@ -10,6 +10,7 @@ function UserProfile() {
   const [showFollowBtn, setShowFollowBtn] = useState(state?!state.following.includes(USER_ID):true)
   const [userInfo, setUserInfo] = useState({});
   const [userPosts, setUserPosts] = useState([]);
+  const [numberOfPosts, setNumberOfPosts] = useState(0)
 
   const getUserPosts = async () => {
     try {
@@ -22,6 +23,7 @@ function UserProfile() {
       const resJSON = await response.json();
       console.log("UserProfile.js", resJSON)
       setUserPosts(resJSON.posts);
+      setNumberOfPosts(resJSON.posts.length)
       setUserInfo(resJSON.user);
     } catch (e) {
       console.log(e);
@@ -88,7 +90,6 @@ function UserProfile() {
     <>
       <div className="about">
         <div className="avatar">
-          {/* static data */}
           <img
             src={(userInfo.avatar === "no pic")?"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDeQ0UC4TH-VQn1gDp7HjwAPQvHiQvYHezg&usqp=CAU": userInfo.avatar}
             alt="avatar-img"
@@ -98,7 +99,7 @@ function UserProfile() {
           <h3>{(userInfo)?userInfo.nickname:"loading"}</h3>
           <p>{(userInfo)?userInfo.email:"loading"}</p>
           <div>
-            <h5>40 postsS</h5>
+            <h5>{numberOfPosts} posts</h5>
             <h5>
               {userInfo.followers ? userInfo.followers.length : "0"} followers
             </h5>
@@ -112,7 +113,6 @@ function UserProfile() {
       <div className="gallery">
         <ul className="posts">
           {userPosts.length == 0? "No Post Found :(" : userPostsToRender}
-          {/* {userPosts.map(userPost => <Post key={userPost._id} post={userPost} />)} */}
         </ul>
       </div>
     </>

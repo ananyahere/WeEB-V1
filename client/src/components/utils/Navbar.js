@@ -71,7 +71,7 @@ function Navbar() {
 
   const searchResultArr = searchResults.map((user) => (
     <li key={user._id} onClick={() => {setModalIsOpen(false); setSearch("")}}>
-      <Link to={(state._id == user._id)?'/profile':`/profile/${user._id}`}>{user.email} as {user.nickname}</Link>
+      <Link to={(state._id === user._id)?'/profile':`/profile/${user._id}`}>{user.email} as {user.nickname}</Link>
     </li>
   ));
 
@@ -106,7 +106,7 @@ function Navbar() {
         </form>
         <div className="output">
           <ul>
-            {searchResults.length == 0 ? "No user found :(" : searchResultArr}
+            {searchResults.length === 0 ? "No user found :(" : searchResultArr}
           </ul>
         </div>
         <div

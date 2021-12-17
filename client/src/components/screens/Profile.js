@@ -10,6 +10,7 @@ function Profile() {
   const [userPosts, setUserPosts] = useState([])
   const [image, setImage] = useState()
   const [imageURL, setImageURL] = useState('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDeQ0UC4TH-VQn1gDp7HjwAPQvHiQvYHezg&usqp=CAU')   
+  const [numberOfPosts, setNumberOfPosts] = useState(0)
 
   const getUserPosts = async () => {
     try{
@@ -25,6 +26,22 @@ function Profile() {
       console.log(e)
     }
   }
+
+  const getUserNumberOfPosts = async () => {
+    try {
+      const response = await fetch(`/profile/${state._id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+      });
+      const resJSON = await response.json()
+      setNumberOfPosts(resJSON.posts.length)
+
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const fileHandler = (e) => {
     setImage(e.target.files[0])
@@ -51,6 +68,7 @@ function Profile() {
 
   useEffect( () => {
     getUserPosts()
+    getUserNumberOfPosts()
   }, [])
 
   useEffect(()=> {
@@ -82,7 +100,7 @@ function Profile() {
           <div className="details">
             <h3>{(state)?state.nickname: "loading"}</h3>
             <div>
-              <h5>40 posts</h5>
+              <h5>{numberOfPosts} posts</h5>
               <h5>{(state)?state.followers.length:"0"} followers</h5>
               <h5>{(state)?state.following.length:"0"} following</h5>
             </div>
