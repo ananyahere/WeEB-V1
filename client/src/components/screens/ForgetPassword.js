@@ -27,7 +27,7 @@ function ForgetPassword() {
       }catch(err){
         console.log(err)
       }
-      forgetPasswordEmail('')              
+      setForgetPasswordEmail('')              
   }
 
   const ForgetPasswordEmailHandler = (e) => {

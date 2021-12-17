@@ -1,27 +1,29 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import './Form.css'
 
 function CreatePost() {
+  const [alert, setAlert] = useState(false)
   const [postTitle, setPostTitle] = useState('')
   const [postBody, setPostBody] = useState('')
   const [image, setImage] = useState()
   const [imageURL, setImageURL] = useState('https://i.pinimg.com/originals/58/a2/2b/58a22b10abdfd9e34a39c47bdde1480f.jpg')
 
-  const postDetails = async () => {
+  const postDetails = async (e) => {
+    e.preventDefault()
     const formData = new FormData()
     formData.append("file", image)
     formData.append("cloud_name", "ananya-cloudinary")  
     formData.append("upload_preset", "social-media-app")  
-    try{
-      const res = await fetch('https://api.cloudinary.com/v1_1/ananya-cloudinary/image/upload', {
+    fetch('https://api.cloudinary.com/v1_1/ananya-cloudinary/image/upload', {
         method: "POST",
         body: formData
       })
-      const JSONres = await res.json()
-      setImageURL(JSONres.url)
-    }catch(e){
-      console.log(e)
-    }
+      .then(res => res.json())
+      .then(JSONres => {
+        setImageURL(JSONres.url)
+        submitPost(JSONres.url)
+      })
+      .catch(e => console.log(e)) 
   }
 
   const postTitleHandler = (e) => {
@@ -30,25 +32,33 @@ function CreatePost() {
   const postBodyHandler = (e) => {
     setPostBody(e.target.value)
   }
-  const submitHandler = async (e) => {
-    e.preventDefault()
-    postDetails()
+
+  const submitPost = async(postURL) => {
     try{
       const res = await fetch('/createpost', {
         method:'POST',
         body: JSON.stringify({
           title: postTitle,
           body: postBody,
-          photoLink: imageURL
+          photoLink: postURL
         }), headers: {
           'Content-Type': 'application/json'
         }
       })
       const JSONdata = await res.json()
+      setAlert(true)
     }catch(e){
       console.log(e)
     }
   }
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setAlert(false)
+    }, 2000)
+    return () => clearTimeout(timeout)
+  }, [alert])
+
 
   const fileHandler = (e) => {
     setImage(e.target.files[0])
@@ -56,7 +66,7 @@ function CreatePost() {
 
   return (
     <div>
-      <form onSubmit={submitHandler}>
+      <form onSubmit={postDetails}>
       <h2>Post</h2>
         <label htmlFor="post-title">Title</label>
         <input type="text" value={postTitle} onChange={postTitleHandler}/>
@@ -68,6 +78,9 @@ function CreatePost() {
         <input type="file" name="post-file" onChange={fileHandler}/>
   
         <button>Create Post</button>
+        <div class="email error">
+          {alert && "post uploaded"}
+        </div>
       </form>
     </div>
   )

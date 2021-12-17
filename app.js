@@ -59,7 +59,7 @@ mongoose
     useCreateIndex: true,
   })
   .then((result) => {
-    console.log('mongobd connected')
+    console.log('mongoose connected')
     server.listen(8000, () => {
       console.log("Listening at port 8000");
     })

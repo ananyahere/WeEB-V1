@@ -2,6 +2,9 @@ import React, {useState, useEffect, useContext} from "react";
 import './Profile.css'
 import Post from '../utils/Post'
 import { UserContext } from "../../App";
+
+
+
 function Profile() {
   const {state, dispatch} = useContext(UserContext)
   const [userPosts, setUserPosts] = useState([])
@@ -27,31 +30,12 @@ function Profile() {
     setImage(e.target.files[0])
   }
 
-  const avatarDetails = async () => {
-    const formData = new FormData()
-    formData.append("file", image)
-    formData.append("cloud_name", "ananya-cloudinary")  
-    formData.append("upload_preset", "social-media-app")  
-    try{
-      const res = await fetch('https://api.cloudinary.com/v1_1/ananya-cloudinary/image/upload', {
-        method: "POST",
-        body: formData
-      })
-      const JSONres = await res.json()
-      console.log('avatar-url', JSONres.url)
-      setImageURL(JSONres.url)
-    }catch(e){
-      console.log(e)
-    }
-  }  
-
-  const updateAvatar = async () => {
-    avatarDetails()
+  const updateAvatar = async (imgURL) => {
     try{
       const res = await fetch('/updateAvatar', {
         method:'PUT',
         body: JSON.stringify({
-          avatarURL: imageURL
+          avatarURL: imgURL
         }), headers: {
           'Content-Type': 'application/json'
         }
@@ -60,20 +44,32 @@ function Profile() {
       // set payload to updated user   
       dispatch({type:"UPDATEPIC", payload: JSONdata.updatedUser})  
       localStorage.setItem('user', JSON.stringify(JSONdata.updatedUser)) 
-      console.log('avatar details',JSONdata)
     }catch(e){
       console.log(e)
     }
   }
 
-  const submitHandler = (e) => {
-    e.preventDefault()
-    updateAvatar()
-  }
-
   useEffect( () => {
     getUserPosts()
   }, [])
+
+  useEffect(()=> {
+    if(image){
+    const formData = new FormData()
+    formData.append("file", image)
+    formData.append("cloud_name", "ananya-cloudinary")  
+    formData.append("upload_preset", "social-media-app")
+   fetch('https://api.cloudinary.com/v1_1/ananya-cloudinary/image/upload', {
+      method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(JSONres => {
+      setImageURL(JSONres.url)
+      updateAvatar(JSONres.url)
+    }).catch(err=>console.log(err))            
+    }
+  }, [image]) 
 
   const userPostsToRender = userPosts.map(userPost =>  <Post key={userPost._id} post={userPost} /> )
 
@@ -90,7 +86,7 @@ function Profile() {
               <h5>{(state)?state.followers.length:"0"} followers</h5>
               <h5>{(state)?state.following.length:"0"} following</h5>
             </div>
-            <form onSubmit={submitHandler}> 
+            <form> 
             <label htmlFor="post-file">Avatar</label>
             <input type="file" name="post-file" onChange={fileHandler} />
             <button>Change Avatar</button>
@@ -100,7 +96,6 @@ function Profile() {
       <div className="gallery">
         <ul className="posts">
           {userPosts.length == 0? "No Post Found :(" : userPostsToRender}
-          {/* {userPosts.map(userPost => <Post key={userPost._id} post={userPost} />)} */}
         </ul>
       </div>
     </>
