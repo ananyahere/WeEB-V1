@@ -7,6 +7,7 @@ const userRoutes = require('./routes/userRoutes')
 const cookieParser = require('cookie-parser')
 const { checkUser } = require('./middleware/authMiddleware')
 const path = require('path')
+require('dotenv').config()
 
 
 const app = express()
@@ -67,8 +68,7 @@ if(process.env.NODE_ENV === 'production'){
 }
 
 // database connection
-const dbURI =
-  "mongodb+srv://Ananya:chunchun8@cluster0.xhwif.mongodb.net/social-media-app?retryWrites=true&w=majority";
+const dbURI = process.env.DB_URI;
 mongoose
   .connect(dbURI, {
     useNewUrlParser: true,

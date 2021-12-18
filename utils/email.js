@@ -4,15 +4,15 @@ const transporter = nodemailer.createTransport(
   {
     service: "hotmail",
     auth: {
-      user: "ananyasharma852@outlook.com",
-      pass: "chunchun8",
+      user: process.env.EMAIL_ID,
+      pass: process.env.EMAIL_PASSWORD,
     }
   }
 )
 
 const mailHandler = (userEmail, userID, token) => {
   const options = {
-    from: "ananyasharma852@outlook.com",
+    from: process.env.EMAIL_ID,
     to: userEmail,
     subject: "Reset Password Request - WEeb",
     text: "There was recently a request to change the password on your account.If you requested this password change, please click the link below. Remeber the link will only be valid for 15 minutes.",
