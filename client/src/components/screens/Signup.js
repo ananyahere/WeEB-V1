@@ -15,7 +15,8 @@ function Signup() {
   const [image, setImage] = useState()
   const [imageURL, setImageURL] = useState('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUDeQ0UC4TH-VQn1gDp7HjwAPQvHiQvYHezg&usqp=CAU')  
 
-  const avatarDetails = async () => {
+  const avatarDetails = async (e) => {
+    e.preventDefault()
     const formData = new FormData()
     formData.append("file", image)
     formData.append("cloud_name", "ananya-cloudinary")  
@@ -26,14 +27,14 @@ function Signup() {
         body: formData
       })
       const JSONres = await res.json()
+      submitHandler(JSONres.url)
       setImageURL(JSONres.url)
     }catch(e){
       console.log(e)
     }
   }  
 
-  const submitHandler = async (e) => {
-    e.preventDefault()
+  const submitHandler = async (imgURL) => {
     const emailError = document.querySelector('.email.error')
     const passwordError = document.querySelector('.password.error')
     try {
@@ -45,25 +46,24 @@ function Signup() {
       });
       const data = await res.json();
   // send backend request with avatar
-      avatarDetails()
       const res2 = await fetch('/updateAvatar', {
         method:'PUT',
         body: JSON.stringify({
-          avatarURL: imageURL
+          avatarURL: imgURL
         }), headers: {
           'Content-Type': 'application/json'
         }
       })
       const JSONdata = await res2.json()      
-      console.log('avatar details',JSONdata)
+      const dataAfterSecondReq = JSONdata.updatedUser
       if (data.errors) {
         emailError.textContent = data.errors.email;
         passwordError.textContent = data.errors.password;
       }
       // user present => update state
       if (data.user) {
-        localStorage.setItem('user', JSON.stringify(data.user))        
-        dispatch({type: "USER", payload: data.user})
+        localStorage.setItem('user', JSON.stringify(dataAfterSecondReq))        
+        dispatch({type: "USER", payload: dataAfterSecondReq})
         setIsLoggedIn(true)
         history.push('/')
       }
@@ -91,7 +91,7 @@ function Signup() {
 
   return (
   <>
-  <form onSubmit={submitHandler}>
+  <form onSubmit={avatarDetails}>
   <h2>Sign up</h2>
   <label htmlFor="nickname">Nickname</label>
   <input type="text" required value={nickname} onChange={nicknameHandler}/>

@@ -35,6 +35,9 @@ function Navbar() {
         </Link>,
         <Link to="/logout" key={"4"}>
           <li className="navStyle btn">Log Out</li>
+        </Link>,
+        <Link to="/resetPassword" key={"5"}>
+          <li className="navStyle">Reset Password</li>
         </Link>
               
       ];

@@ -69,6 +69,7 @@ function Profile() {
   useEffect( () => {
     getUserPosts()
     getUserNumberOfPosts()
+    console.log(state)
   }, [])
 
   useEffect(()=> {

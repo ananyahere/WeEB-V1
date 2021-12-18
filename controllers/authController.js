@@ -123,10 +123,10 @@ module.exports.resetPassword_get = (req, res) => {
   jwt.verify(token, "secret for reset password", (err, decodedToken) => {
     if (err) {
       console.log(err);
-      res.redirect("/");
+      // res.redirect("/");
     } else {
       console.log(decodedToken, "token matches1");
-      res.render("resetPassword");
+      res.status(200).json({token: token})
     }
   });
 };
@@ -134,7 +134,6 @@ module.exports.resetPassword_get = (req, res) => {
 module.exports.resetPassword_post = (req, res) => {
   const { email, id } = req.params;
   const { password1, password2 } = req.body;
-  console.log('req.body', req.body)
   // here we recieve equal password & confirm password
   // get user by Id
 
@@ -176,6 +175,7 @@ module.exports.resetPassword_post = (req, res) => {
                   userToBeUpdate.password = password1
                   //save password
                   await userToBeUpdate.save()
+                  res.status(200).json({msg: 'password updated'})
                 }catch(e){
                   console.log(e)
                 }
@@ -193,4 +193,7 @@ module.exports.resetPassword_post = (req, res) => {
     res.status(400);
   }
 };
+
+
+
 

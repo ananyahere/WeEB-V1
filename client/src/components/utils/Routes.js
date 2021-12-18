@@ -9,6 +9,7 @@ import UserProfile from '../screens/UserProfile'
 import SubUsersPost from '../screens/SubUsersPost'
 import ForgetPassword from '../screens/ForgetPassword'
 import ChatForm from '../chat-feature/ChatForm'
+import ResetPassword from '../screens/ResetPassword'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import {LoginStatusContext} from '../Hooks/LoginStatusContext'
 import {UserContext} from '../../App'
@@ -48,7 +49,8 @@ function Routes() {
     <Route path="/profile/:USER_ID"><UserProfile/></Route> 
     <Route path="/userSubPost"><SubUsersPost/></Route> 
     <Route path="/chat-room"><ChatForm /></Route>
-    <Route path="/forgetPassword"><ForgetPassword /></Route>  
+    <Route path="/forgetPassword"><ForgetPassword /></Route> 
+    <Route path="/resetPassword/:USER_EMAIL/:USER_ID/:TOKEN"><ResetPassword /></Route> 
     <Route path="/logout"><LoggedOut/></Route>
     </Switch>
   )
