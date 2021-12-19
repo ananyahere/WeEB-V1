@@ -1,6 +1,7 @@
 import React, {useContext, useEffect} from 'react'
 import {LoginStatusContext} from '../Hooks/LoginStatusContext'
 import {UserContext} from '../../App'
+import "./LoggedOut.css";
 
 function LoggedOut() {
   const {state, dispatch} = useContext(UserContext)
@@ -12,7 +13,7 @@ function LoggedOut() {
   setIsLoggedIn(false)
   return (
     <div>
-      We are sorry to see you leave.
+      <h4>We are sorry to see you leave :(</h4>
     </div>
   )
 }

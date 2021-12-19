@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import "./Navbar.css";
 import { FaSearch, FaTwitch } from "react-icons/fa";
+import {FiMessageSquare} from "react-icons/fi";
 import Modal from "react-modal";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../App";
@@ -25,7 +26,7 @@ function Navbar() {
           <li>{`Welcome back, ${state.nickname}`}</li>
         </Link>,
         <Link  to="/chat-room" key={"5"}>
-        <li><FaTwitch /></li>
+        <li><FiMessageSquare /></li>
         </Link>,
         <Link to="/createPost" key={"2"}>
           <li className="navStyle btn">Create Post</li>
@@ -35,9 +36,6 @@ function Navbar() {
         </Link>,
         <Link to="/logout" key={"4"}>
           <li className="navStyle btn">Log Out</li>
-        </Link>,
-        <Link to="/resetPassword" key={"5"}>
-          <li className="navStyle">Reset Password</li>
         </Link>
               
       ];

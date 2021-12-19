@@ -67,6 +67,7 @@ function Signup() {
         setIsLoggedIn(true)
         history.push('/')
       }
+      console.log(state)
     }
     catch (err) {
       console.log(err);

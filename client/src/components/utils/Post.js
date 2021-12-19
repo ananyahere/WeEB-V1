@@ -60,7 +60,7 @@ function Post({ post }) {
   return (
     <li className="post">
       <img
-        src="https://i.pinimg.com/564x/8b/e4/d5/8be4d5b8675f9cea2b61968a43eb075f.jpg"
+        src="https://c.tenor.com/3j56ITrFib0AAAAC/gif-anime-purple.gif"
         alt="smoothie recipe icon"
       />
 

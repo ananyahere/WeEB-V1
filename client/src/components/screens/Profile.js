@@ -114,7 +114,7 @@ function Profile() {
       </div>
       <div className="gallery">
         <ul className="posts">
-          {userPosts.length == 0? "No Post Found :(" : userPostsToRender}
+          {userPosts.length == 0? <h4>No Posts Found :(</h4> : userPostsToRender}
         </ul>
       </div>
     </>
